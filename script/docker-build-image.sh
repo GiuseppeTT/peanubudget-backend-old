@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t local-app-budget .
+docker build -t local-peanubudget .
