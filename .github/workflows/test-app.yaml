@@ -1,0 +1,49 @@
+name: Test app
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_hostname: app.terraform.io
+          cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
+          terraform_version: ~1.3
+          terraform_wrapper: false
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Set database environment variables
+        run: |
+          echo "DATABASE_USERNAME=$(terraform output -raw database_username)" >> $GITHUB_ENV
+          echo "DATABASE_PASSWORD=$(terraform output -raw database_password)" >> $GITHUB_ENV
+          echo "DATABASE_FQDN=$(terraform output -raw database_fqdn)" >> $GITHUB_ENV
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install poetry
+          poetry install --no-root
+
+      - name: Test app
+        env:
+          DATABASE_USERNAME: ${{ env.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+          DATABASE_FQDN: ${{ env.DATABASE_FQDN }}
+        run: |
+          poetry run pytest

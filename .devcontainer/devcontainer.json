@@ -1,0 +1,31 @@
+{
+	"name": "Python 3",
+	"image": "mcr.microsoft.com/devcontainers/python:3.11",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/poetry:1": {},
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/terraform:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bungcip.better-toml",
+				"hashicorp.terraform",
+				"VisualStudioExptTeam.vscodeintellicode"
+			]
+		}
+	},
+
+	// Load environment variables
+	// https://code.visualstudio.com/remote/advancedcontainers/environment-variables
+	"runArgs": ["--env-file", ".env"],
+
+	// Set up devcontainer after container is created
+	// https://code.visualstudio.com/docs/devcontainers/create-dev-container#_rebuild
+	"postCreateCommand": ". .devcontainer/run-post-create-set-up.sh"
+
+	// Uncomment to connect as root instead
+	// https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

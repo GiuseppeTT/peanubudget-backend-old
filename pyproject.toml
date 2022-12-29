@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "app-budget"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "app_budget"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = {extras = ["all"], version = "^0.87.0"}
+sqlmodel = {extras = ["all"], version = "^0.0.8"}
+psycopg2 = "^2.9.5"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.6.0"
+pre-commit = "^2.20.0"
+pytest = "^7.2.0"
+black = "^22.10.0"
+isort = "^5.10.1"
+mypy = "^0.991"
+pylint = "^2.15.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+skip-magic-trailing-comma = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.pylint.format]
+max-line-length = "100"
+
+[tool.pylint]
+recursive = true
+ignore = "debug.py"
+disable = "R0801, R0903, R0914, C0114, C0115, C0116"

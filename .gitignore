@@ -1,0 +1,8 @@
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.terraform/
+.venv/
+.env
+debug.py
+*.tfstate
