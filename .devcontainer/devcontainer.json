@@ -18,14 +18,14 @@
 	},
 
 	// Load environment variables
-	// https://code.visualstudio.com/remote/advancedcontainers/environment-variables
 	"runArgs": ["--env-file", ".env"],
 
 	// Set up devcontainer after container is created
-	// https://code.visualstudio.com/docs/devcontainers/create-dev-container#_rebuild
-	"postCreateCommand": ". .devcontainer/run-post-create-set-up.sh"
+	"postCreateCommand": ". .devcontainer/set-up-post-creation.sh"
+
+	// Make a list of ports inside the container available locally
+	// "forwardPorts": [],
 
 	// Uncomment to connect as root instead
-	// https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
