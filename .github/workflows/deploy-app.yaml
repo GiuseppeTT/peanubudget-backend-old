@@ -14,11 +14,6 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -44,6 +39,11 @@ jobs:
 
           echo "APP_FQDN=$(terraform output -raw app_fqdn)" >> $GITHUB_ENV
 
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Login to Azure Container registry
         uses: azure/docker-login@v1
         with:
@@ -56,20 +56,20 @@ jobs:
           docker build -t ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }} .
           docker push ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }}
 
-      # - name: Deploy containerized app to Azure Container Instances
-      #   uses: azure/aci-deploy@v1
-      #   with:
-      #     resource-group: ${{ env.RESOURCE_GROUP_NAME }}
-      #     dns-name-label: ${{ env.RESOURCE_GROUP_NAME }}
-      #     image: ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }}
-      #     registry-login-server: ${{ env.CONTAINER_REGISTRY_FQDN }}
-      #     registry-username: ${{ env.CONTAINER_REGISTRY_USERNAME }}
-      #     registry-password: ${{ env.CONTAINER_REGISTRY_PASSWORD }}
-      #     secure-environment-variables: |
-      #       DATABASE_USERNAME=${{ env.DATABASE_USERNAME }}
-      #       DATABASE_PASSWORD=${{ env.DATABASE_PASSWORD }}
-      #       DATABASE_FQDN=${{ env.DATABASE_FQDN }}
-      #     cpu: 1
-      #     memory: 1
-      #     name: peanubudget-backend
-      #     location: east us
+      - name: Deploy containerized app to Azure Container Instances
+        uses: azure/aci-deploy@v1
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP_NAME }}
+          dns-name-label: ${{ env.RESOURCE_GROUP_NAME }}
+          image: ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }}
+          registry-login-server: ${{ env.CONTAINER_REGISTRY_FQDN }}
+          registry-username: ${{ env.CONTAINER_REGISTRY_USERNAME }}
+          registry-password: ${{ env.CONTAINER_REGISTRY_PASSWORD }}
+          secure-environment-variables: |
+            DATABASE_USERNAME=${{ env.DATABASE_USERNAME }}
+            DATABASE_PASSWORD=${{ env.DATABASE_PASSWORD }}
+            DATABASE_FQDN=${{ env.DATABASE_FQDN }}
+          cpu: 1
+          memory: 1
+          name: peanubudget-backend
+          location: east us
