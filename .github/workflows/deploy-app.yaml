@@ -37,9 +37,7 @@ jobs:
           echo "CONTAINER_REGISTRY_PASSWORD=$(terraform output -raw container_registry_password)" >> $GITHUB_ENV
           echo "CONTAINER_REGISTRY_FQDN=$(terraform output -raw container_registry_fqdn)" >> $GITHUB_ENV
 
-          echo "APP_FQDN=$(terraform output -raw app_fqdn)" >> $GITHUB_ENV
-
-          echo "IMAGE_NAME=$(terraform output -raw container_registry_fqdn)/peanubudget-backend:${{ github.sha }}"
+          echo "IMAGE_NAME=$(terraform output -raw container_registry_fqdn)/peanubudget-backend:${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -55,15 +53,15 @@ jobs:
 
       - name: Build and push docker image
         run: |
-          docker build -t ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }} .
-          docker push ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }}
+          docker build -t ${{ env.IMAGE_NAME }} .
+          docker push ${{ env.IMAGE_NAME }}
 
       - name: Deploy containerized app to Azure Container Instances
         uses: azure/aci-deploy@v1
         with:
           resource-group: ${{ env.RESOURCE_GROUP_NAME }}
           dns-name-label: peanubudget
-          image: ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }}
+          image: ${{ env.IMAGE_NAME }}
           registry-login-server: ${{ env.CONTAINER_REGISTRY_FQDN }}
           registry-username: ${{ env.CONTAINER_REGISTRY_USERNAME }}
           registry-password: ${{ env.CONTAINER_REGISTRY_PASSWORD }}
@@ -73,5 +71,5 @@ jobs:
             DATABASE_FQDN=${{ env.DATABASE_FQDN }}
           cpu: 1
           memory: 1
-          name: peanubudget-backend
+          name: peanubudget-container-instance
           location: east us
