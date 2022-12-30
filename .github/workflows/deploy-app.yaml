@@ -39,6 +39,8 @@ jobs:
 
           echo "APP_FQDN=$(terraform output -raw app_fqdn)" >> $GITHUB_ENV
 
+          echo "IMAGE_NAME=$(terraform output -raw container_registry_fqdn)/peanubudget-backend:${{ github.sha }}"
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -60,7 +62,7 @@ jobs:
         uses: azure/aci-deploy@v1
         with:
           resource-group: ${{ env.RESOURCE_GROUP_NAME }}
-          dns-name-label: ${{ env.RESOURCE_GROUP_NAME }}
+          dns-name-label: peanubudget
           image: ${{ env.CONTAINER_REGISTRY_FQDN }}/peanubudget-backend:${{ github.sha }}
           registry-login-server: ${{ env.CONTAINER_REGISTRY_FQDN }}
           registry-username: ${{ env.CONTAINER_REGISTRY_USERNAME }}
