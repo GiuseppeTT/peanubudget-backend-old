@@ -1,7 +1,6 @@
 name: Deploy app
 
 on:
-  pull_request:
   workflow_dispatch:
   push:
     branches:
@@ -38,7 +37,6 @@ jobs:
           echo "CONTAINER_REGISTRY_FQDN=$(terraform output -raw container_registry_fqdn)" >> $GITHUB_ENV
 
           echo "IMAGE_NAME=$(terraform output -raw container_registry_fqdn)/peanubudget-backend:${{ github.sha }}" >> $GITHUB_ENV
-
 
       - name: Login to Azure
         uses: azure/login@v1
