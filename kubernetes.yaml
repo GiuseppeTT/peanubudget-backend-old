@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: peanubudget
+  labels:
+    app: peanubudget
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: peanubudget
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peanubudget
+  labels:
+    app: peanubudget
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: peanubudget
+  template:
+    metadata:
+      labels:
+        app: peanubudget
+    spec:
+      containers:
+      - name: peanubudget
+        image: giuseppett/peanubudget
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE_USERNAME
+          value: "giutt"
+        - name: DATABASE_PASSWORD
+          value: "12345678aA"
+        - name: DATABASE_FQDN
+          value: "abcd.postgres.database.azure.com"

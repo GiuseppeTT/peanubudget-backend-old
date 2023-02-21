@@ -5,14 +5,16 @@
 		"ghcr.io/devcontainers-contrib/features/poetry:1": {},
 		"ghcr.io/devcontainers/features/azure-cli:1": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers/features/terraform:1": {}
+		"ghcr.io/devcontainers/features/terraform:1": {},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1" : {}
 	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"bungcip.better-toml",
 				"hashicorp.terraform",
-				"VisualStudioExptTeam.vscodeintellicode"
+				"VisualStudioExptTeam.vscodeintellicode",
+				"GitHub.copilot"
 			]
 		}
 	},
