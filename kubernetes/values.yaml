@@ -1,0 +1,5 @@
+prefix: peanubudget
+app: peanubudget
+image: giuseppett/peanubudget
+port: 80
+replicaCount: 3

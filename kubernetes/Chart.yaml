@@ -1,0 +1,4 @@
+apiVersion: v2
+name: peanubudget
+description: Chart for peanubudget backend
+version: 0.1.0
